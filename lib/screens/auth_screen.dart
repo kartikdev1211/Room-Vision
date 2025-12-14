@@ -2,11 +2,13 @@
 
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:room_vision/constants/constant_string.dart';
 import 'package:room_vision/constants/text_styles.dart';
 import 'package:room_vision/constants/colors.dart';
+import 'package:room_vision/navigation_layout.dart';
 import 'package:room_vision/widgets/app_primary_button.dart';
 import 'package:room_vision/widgets/app_text_fields.dart';
 import 'package:room_vision/widgets/google_signin_button.dart';
@@ -204,7 +206,13 @@ class _AuthScreenState extends State<AuthScreen>
                     ? ConstantString.login
                     : ConstantString.signup,
                 onPressed: () {
-                  if (_formKey.currentState!.validate()) {}
+                  // if (_formKey.currentState!.validate()) {}
+                  Navigator.pushReplacement(
+                    context,
+                    CupertinoPageRoute(
+                      builder: (context) => NavigationLayout(),
+                    ),
+                  );
                 },
               ),
               const SizedBox(height: 18),
