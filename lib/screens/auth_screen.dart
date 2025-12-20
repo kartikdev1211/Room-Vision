@@ -1,7 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
 import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -36,7 +35,7 @@ class _AuthScreenState extends State<AuthScreen>
     super.initState();
     _bgController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 10),
+      duration: const Duration(seconds: 12),
     )..repeat(reverse: true);
   }
 
@@ -57,10 +56,10 @@ class _AuthScreenState extends State<AuthScreen>
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: const [
-                  Color(0xFF0F2027),
-                  Color(0xFF203A43),
-                  Color(0xFF2C5364),
+                colors: [
+                  AppColors.darkNavy,
+                  AppColors.blueSlate,
+                  AppColors.mutedCyanBlue,
                 ],
                 stops: [0, 0.5 + (_bgController.value * 0.2), 1],
               ),
@@ -90,42 +89,45 @@ class _AuthScreenState extends State<AuthScreen>
     );
   }
 
+  /// LOGO — matches splash exactly
   Widget _buildLogo() {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         gradient: const LinearGradient(
-          colors: [Color(0xFF22D3EE), Color(0xFF3B82F6)],
+          colors: [AppColors.cyan, AppColors.blue],
         ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.cyanAccentColor.withOpacity(0.6),
-            blurRadius: 40,
+            color: AppColors.cyan.withOpacity(0.6),
+            blurRadius: 45,
+            spreadRadius: 2,
           ),
         ],
       ),
-      child: Image.asset("assets/images/app_logo.png", height: 44),
+      child: Image.asset("assets/images/app_logo.png", height: 48),
     );
   }
 
+  /// AUTH CARD — glass + premium
   Widget _buildAuthCard(bool isLoginMode) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(22),
+      borderRadius: BorderRadius.circular(24),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+        filter: ImageFilter.blur(sigmaX: 14, sigmaY: 14),
         child: Container(
           padding: const EdgeInsets.all(26),
           decoration: BoxDecoration(
-            color: AppColors.whiteColor.withOpacity(0.06),
-            borderRadius: BorderRadius.circular(22),
+            color: AppColors.whiteColor.withOpacity(0.07),
+            borderRadius: BorderRadius.circular(24),
             border: Border.all(color: AppColors.whiteColor.withOpacity(0.15)),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               AnimatedSwitcher(
-                duration: const Duration(milliseconds: 300),
+                duration: const Duration(milliseconds: 250),
                 child: Text(
                   isLoginMode
                       ? ConstantString.welcomeBack
@@ -135,7 +137,7 @@ class _AuthScreenState extends State<AuthScreen>
                 ),
               ),
 
-              const SizedBox(height: 6),
+              const SizedBox(height: 8),
 
               Text(
                 isLoginMode
@@ -155,12 +157,6 @@ class _AuthScreenState extends State<AuthScreen>
                         hint: "Full Name",
                         icon: Icons.person,
                         controller: nameController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Name is required";
-                          }
-                          return null;
-                        },
                       ),
                       const SizedBox(height: 16),
                     ],
@@ -170,15 +166,6 @@ class _AuthScreenState extends State<AuthScreen>
                       icon: Icons.email,
                       controller: emailController,
                       keyboardType: TextInputType.emailAddress,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Email is required";
-                        }
-                        if (!value.contains('@')) {
-                          return "Enter a valid email";
-                        }
-                        return null;
-                      },
                     ),
 
                     const SizedBox(height: 16),
@@ -188,12 +175,6 @@ class _AuthScreenState extends State<AuthScreen>
                       icon: Icons.lock,
                       controller: passwordController,
                       isPassword: true,
-                      validator: (value) {
-                        if (value == null || value.length < 6) {
-                          return "Password must be at least 6 characters";
-                        }
-                        return null;
-                      },
                     ),
                   ],
                 ),
@@ -206,7 +187,6 @@ class _AuthScreenState extends State<AuthScreen>
                     ? ConstantString.login
                     : ConstantString.signup,
                 onPressed: () {
-                  // if (_formKey.currentState!.validate()) {}
                   Navigator.pushReplacement(
                     context,
                     CupertinoPageRoute(
@@ -215,20 +195,21 @@ class _AuthScreenState extends State<AuthScreen>
                   );
                 },
               ),
-              const SizedBox(height: 18),
+
+              const SizedBox(height: 20),
 
               Row(
-                children: [
+                children: const [
                   Expanded(child: Divider(color: Colors.white24)),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Text("OR", style: TextStyle(color: Colors.white54)),
                   ),
                   Expanded(child: Divider(color: Colors.white24)),
                 ],
               ),
 
-              const SizedBox(height: 18),
+              const SizedBox(height: 20),
 
               GoogleSignInButton(onPressed: () {}),
 
@@ -238,7 +219,7 @@ class _AuthScreenState extends State<AuthScreen>
                 child: GestureDetector(
                   onTap: () => isLogin.value = !isLogin.value,
                   child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 250),
+                    duration: const Duration(milliseconds: 200),
                     child: Text(
                       isLoginMode
                           ? ConstantString.dontHaveAccount

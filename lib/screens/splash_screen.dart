@@ -2,7 +2,6 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:room_vision/constants/colors.dart';
 import 'package:room_vision/constants/constant_string.dart';
 import 'package:room_vision/screens/auth_screen.dart';
 import '../constants/text_styles.dart';
@@ -24,20 +23,21 @@ class _SplashScreenState extends State<SplashScreen>
     super.initState();
 
     _controller = AnimationController(
-      duration: const Duration(seconds: 1),
       vsync: this,
+      duration: const Duration(seconds: 1),
     );
 
-    _fadeAnimation = Tween<double>(
-      begin: 0,
-      end: 1,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
+    _fadeAnimation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeOut,
+    );
 
     _controller.forward();
-    Future.delayed(Duration(seconds: 3), () {
+
+    Future.delayed(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
-        CupertinoPageRoute(builder: (context) => AuthScreen()),
+        CupertinoPageRoute(builder: (_) => const AuthScreen()),
       );
     });
   }
@@ -50,14 +50,16 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
+    final primary = Theme.of(context).primaryColor;
+
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              AppColors.darkNavy, // dark navy
-              AppColors.blueSlate, // blue slate
-              AppColors.mutedCyanBlue, // muted cyan-blue
+              primary.withOpacity(0.95),
+              primary.withOpacity(0.75),
+              primary.withOpacity(0.55),
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -69,20 +71,20 @@ class _SplashScreenState extends State<SplashScreen>
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Soft glow circle (enhances the icon)
+                /// Logo with glow
                 Container(
                   padding: const EdgeInsets.all(22),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    gradient: const LinearGradient(
+                    gradient: LinearGradient(
                       colors: [
-                        AppColors.cyan, // cyan
-                        AppColors.blue, // blue
+                        primary.withOpacity(0.9),
+                        primary.withOpacity(0.6),
                       ],
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.cyan.withOpacity(0.5),
+                        color: primary.withOpacity(0.6),
                         blurRadius: 45,
                         spreadRadius: 2,
                       ),
@@ -108,9 +110,9 @@ class _SplashScreenState extends State<SplashScreen>
 
                 const SizedBox(height: 50),
 
-                const CircularProgressIndicator(
+                CircularProgressIndicator(
                   strokeWidth: 2,
-                  color: AppColors.whiteColor,
+                  valueColor: AlwaysStoppedAnimation(primary),
                 ),
               ],
             ),
